@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>의식 음악 듣기 기록장 · 음악 보고서</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">
+        <span class="badge-grade">5학년 음악</span>
+        <h1 class="topbar-title">의식 음악 듣기 기록장 · 음악 보고서</h1>
+      </div>
+
+      <div class="topbar-status">
+        <div class="progress-wrap" aria-label="작성 진행률">
+          <progress id="formProgress" max="100" value="0"></progress>
+          <span id="progressText" class="progress-text">0% 작성</span>
+        </div>
+        <div id="saveStatus" class="save-status" role="status" aria-live="polite">자동 저장 대기</div>
+      </div>
+
+      <div class="topbar-actions">
+        <button type="button" id="resetOpenBtn" class="btn btn-ghost">초기화</button>
+        <button type="submit" form="worksheetForm" id="exportBtn" class="btn btn-primary">
+          <span aria-hidden="true">🖼️</span> 이미지 저장
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <form id="worksheetForm" novalidate>
+      <!-- 학생 정보 -->
+      <section class="card student-card" aria-labelledby="studentInfoTitle">
+        <div class="student-head">
+          <h2 id="studentInfoTitle" class="sr-only">학생 정보</h2>
+          <p class="textbook-ref">음악 5학년 · 3단원 「음악의 즐거움을 함께해요」 · 교과서 64~65쪽</p>
+        </div>
+        <div class="student-fields">
+          <div class="field-inline">
+            <span class="grade-static">5학년</span>
+            <label for="studentClass" class="sr-only">반</label>
+            <input
+              type="text"
+              id="studentClass"
+              name="studentClass"
+              inputmode="numeric"
+              maxlength="2"
+              placeholder="예: 3"
+              enterkeyhint="next"
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              class="input-short"
+            >
+            <span class="field-unit">반</span>
+          </div>
+          <div class="field-inline field-name">
+            <label for="studentName">이름</label>
+            <input
+              type="text"
+              id="studentName"
+              name="studentName"
+              autocomplete="name"
+              maxlength="20"
+              placeholder="이름을 입력하세요"
+              enterkeyhint="next"
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- 페이지 전환 탭 -->
+      <nav class="page-tabs" aria-label="학습지 쪽 이동">
+        <button type="button" id="tabPage1" class="page-tab is-active" aria-current="step" aria-controls="panelPage1">
+          <span class="tab-num">1면</span>
+          <span class="tab-label">의식 음악 듣기 기록장</span>
+        </button>
+        <button type="button" id="tabPage2" class="page-tab" aria-controls="panelPage2">
+          <span class="tab-num">2면</span>
+          <span class="tab-label">음악 보고서</span>
+        </button>
+      </nav>
+
+      <!-- ══════════════════ 1면 ══════════════════ -->
+      <section id="panelPage1" class="worksheet-panel" aria-labelledby="page1Heading">
+        <div class="panel-banner">
+          <h2 id="page1Heading" tabindex="-1">1면 · 의식 음악 듣기 기록장</h2>
+          <p>수업을 들으며 빈칸을 채우고, 선을 잇고, 느낀 점을 체크해 봅시다.</p>
+        </div>
+
+        <!-- 문항 1 -->
+        <article class="card q-card" aria-labelledby="q1Title">
+          <header class="q-head">
+            <span class="q-num" aria-hidden="true">1</span>
+            <div>
+              <h3 id="q1Title" class="q-title">의식 음악이 무엇인지 채워 봅시다.</h3>
+              <p class="q-sub">보기 낱말을 누르거나 직접 입력하세요.</p>
+            </div>
+          </header>
+
+          <div class="word-bank" role="group" aria-label="보기 낱말">
+            <span class="word-bank-label">보기</span>
+            <button type="button" class="word-chip" data-word="순서">순서</button>
+            <button type="button" class="word-chip" data-word="감상">감상</button>
+            <button type="button" class="word-chip" data-word="한 부분">한 부분</button>
+            <button type="button" class="word-chip" data-word="특별한">특별한</button>
+            <button type="button" class="word-chip" data-word="신호">신호</button>
+          </div>
+
+          <div class="fill-sentences">
+            <p>
+              의식이란 정해진
+              <label for="q1_1" class="sr-only">첫 번째 빈칸</label>
+              <input type="text" id="q1_1" name="q1_1" class="inline-blank blank-sm" data-blank-index="0" maxlength="10" placeholder="빈칸 1" enterkeyhint="next">대로
+              치르는 중요한 일이다. 의식 음악은 그 일과 함께 붙어 있는 음악으로,
+              <label for="q1_2" class="sr-only">두 번째 빈칸</label>
+              <input type="text" id="q1_2" name="q1_2" class="inline-blank blank-sm" data-blank-index="1" maxlength="10" placeholder="빈칸 2" enterkeyhint="next">하려고
+              만든 음악이 아니라 의식의
+              <label for="q1_3" class="sr-only">세 번째 빈칸</label>
+              <input type="text" id="q1_3" name="q1_3" class="inline-blank blank-md" data-blank-index="2" maxlength="12" placeholder="빈칸 3" enterkeyhint="next">으로
+              쓰인다.
+            </p>
+            <p>
+              의식 음악이 하는 일은 세 가지다. 첫째, 지금부터가
+              <label for="q1_4" class="sr-only">네 번째 빈칸</label>
+              <input type="text" id="q1_4" name="q1_4" class="inline-blank blank-sm" data-blank-index="3" maxlength="10" placeholder="빈칸 4" enterkeyhint="next">
+              시간이라고 알린다. 둘째, 여러 사람의 마음과 몸을 하나로 맞춘다. 셋째, 지금이 어느 순서인지
+              <label for="q1_5" class="sr-only">다섯 번째 빈칸</label>
+              <input type="text" id="q1_5" name="q1_5" class="inline-blank blank-sm" data-blank-index="4" maxlength="10" placeholder="빈칸 5" enterkeyhint="next">를
+              보낸다.
+            </p>
+          </div>
+        </article>
+
+        <!-- 문항 2 -->
+        <article class="card q-card" aria-labelledby="q2Title">
+          <header class="q-head">
+            <span class="q-num" aria-hidden="true">2</span>
+            <div>
+              <h3 id="q2Title" class="q-title">우리나라의 의식 음악을 알맞게 이어 봅시다.</h3>
+              <p class="q-sub">왼쪽 음악을 누른 뒤, 알맞은 오른쪽 설명을 눌러 선으로 이으세요.</p>
+            </div>
+            <button type="button" id="clearMatchBtn" class="btn btn-sm btn-outline">선 모두 지우기</button>
+          </header>
+
+          <div id="matchStatus" class="sr-only" role="status" aria-live="polite"></div>
+
+          <div class="match-board" id="matchBoard">
+            <svg class="match-svg" id="matchSvg" aria-hidden="true"></svg>
+
+            <div class="match-col match-left" role="group" aria-label="의식 음악">
+              <button type="button" class="match-item" data-side="left" data-id="jongmyo" data-color="#c0392b" style="--item-color: var(--red)">
+                <span class="match-text">종묘제례악</span>
+                <span class="match-dot" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="match-item" data-side="left" data-id="munmyo" data-color="#1c2430" style="--item-color: var(--ink)">
+                <span class="match-text">문묘제례악</span>
+                <span class="match-dot" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="match-item" data-side="left" data-id="yeongsan" data-color="#c8963e" style="--item-color: var(--gold)">
+                <span class="match-text">영산재</span>
+                <span class="match-dot" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="match-item" data-side="left" data-id="ssitgim" data-color="#7d4a86" style="--item-color: var(--plum)">
+                <span class="match-text">씻김굿</span>
+                <span class="match-dot" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="match-item" data-side="left" data-id="daechwita" data-color="#1f7a86" style="--item-color: var(--teal)">
+                <span class="match-text">대취타</span>
+                <span class="match-dot" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <div class="match-gap" aria-hidden="true"></div>
+
+            <div class="match-col match-right" role="group" aria-label="의식 음악 설명">
+              <button type="button" class="match-item" data-side="right" data-id="king">
+                <span class="match-dot" aria-hidden="true"></span>
+                <span class="match-text">임금의 행차와 군대 행진</span>
+              </button>
+              <button type="button" class="match-item" data-side="right" data-id="shaman">
+                <span class="match-dot" aria-hidden="true"></span>
+                <span class="match-text">죽은 이를 보내는 무속 의식</span>
+              </button>
+              <button type="button" class="match-item" data-side="right" data-id="royal">
+                <span class="match-dot" aria-hidden="true"></span>
+                <span class="match-text">조선 왕과 왕비의 제사</span>
+              </button>
+              <button type="button" class="match-item" data-side="right" data-id="confucius">
+                <span class="match-dot" aria-hidden="true"></span>
+                <span class="match-text">공자를 모시는 제사(석전대제)</span>
+              </button>
+              <button type="button" class="match-item" data-side="right" data-id="buddha">
+                <span class="match-dot" aria-hidden="true"></span>
+                <span class="match-text">불교의 큰 재(齋)</span>
+              </button>
+            </div>
+          </div>
+          <p class="helper-note">연결된 항목을 다시 누르면 선이 바뀌거나 끊어집니다.</p>
+        </article>
+
+        <!-- 문항 3 -->
+        <article class="card q-card" aria-labelledby="q3Title">
+          <header class="q-head">
+            <span class="q-num" aria-hidden="true">3</span>
+            <div>
+              <h3 id="q3Title" class="q-title">「종묘제례악」을 들으며 표시해 봅시다.</h3>
+              <p class="q-sub">들으면서 바로 체크</p>
+            </div>
+          </header>
+
+          <div class="q3-grid">
+            <fieldset class="q3-row">
+              <legend class="q3-label">빠르기</legend>
+              <div class="choice-list">
+                <label class="choice-pill">
+                  <input type="radio" name="q3_tempo" value="아주 느리다">
+                  <span>아주 느리다</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="radio" name="q3_tempo" value="보통이다">
+                  <span>보통이다</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="radio" name="q3_tempo" value="빠르다">
+                  <span>빠르다</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="q3-row">
+              <legend class="q3-label">한 글자의 길이</legend>
+              <div class="choice-list">
+                <label class="choice-pill">
+                  <input type="radio" name="q3_syllable" value="아주 길게 끈다">
+                  <span>아주 길게 끈다</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="radio" name="q3_syllable" value="보통이다">
+                  <span>보통이다</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="radio" name="q3_syllable" value="짧게 끊는다">
+                  <span>짧게 끊는다</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="q3-row">
+              <legend class="q3-label">들리는 소리</legend>
+              <div class="choice-list">
+                <label class="choice-pill">
+                  <input type="checkbox" name="q3_sounds" value="쇠붙이(종)">
+                  <span>쇠붙이(종)</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="checkbox" name="q3_sounds" value="돌(경쇠)">
+                  <span>돌(경쇠)</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="checkbox" name="q3_sounds" value="피리·대금">
+                  <span>피리·대금</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="checkbox" name="q3_sounds" value="북">
+                  <span>북</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="checkbox" name="q3_sounds" value="사람 노랫소리">
+                  <span>사람 노랫소리</span>
+                </label>
+                <label class="choice-pill">
+                  <input type="checkbox" name="q3_sounds" value="긁는 소리">
+                  <span>긁는 소리</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="q3-row">
+              <legend class="q3-label">
+                어울리는 낱말
+                <span class="legend-sub">두 개까지</span>
+              </legend>
+              <div class="q3-words-wrap">
+                <div class="choice-list">
+                  <label class="choice-pill">
+                    <input type="checkbox" name="q3_words" value="엄숙하다">
+                    <span>엄숙하다</span>
+                  </label>
+                  <label class="choice-pill">
+                    <input type="checkbox" name="q3_words" value="웅장하다">
+                    <span>웅장하다</span>
+                  </label>
+                  <label class="choice-pill">
+                    <input type="checkbox" name="q3_words" value="신난다">
+                    <span>신난다</span>
+                  </label>
+                  <label class="choice-pill">
+                    <input type="checkbox" name="q3_words" value="낯설다">
+                    <span>낯설다</span>
+                  </label>
+                  <label class="choice-pill">
+                    <input type="checkbox" name="q3_words" value="차분하다">
+                    <span>차분하다</span>
+                  </label>
+                  <label class="choice-pill">
+                    <input type="checkbox" name="q3_words" value="지루하다">
+                    <span>지루하다</span>
+                  </label>
+                  <label class="choice-pill choice-custom">
+                    <input type="checkbox" id="q3WordCustomCheck" name="q3_words" value="__custom__">
+                    <span>(직접)</span>
+                  </label>
+                  <label for="q3WordCustomText" class="sr-only">어울리는 낱말 직접 입력</label>
+                  <input type="text" id="q3WordCustomText" name="q3_word_custom" class="input-custom-word" maxlength="16" placeholder="직접 입력">
+                </div>
+                <p id="q3WordHint" class="limit-hint" role="status" aria-live="polite"></p>
+              </div>
+            </fieldset>
+
+            <div class="q3-row q3-row-text">
+              <label for="q3Impression" class="q3-label">가장 인상 깊은 것</label>
+              <textarea id="q3Impression" name="q3_impression" rows="2" maxlength="200" placeholder="가장 기억에 남는 소리나 장면을 적어 보세요."></textarea>
+            </div>
+          </div>
+        </article>
+
+        <!-- 문항 4 -->
+        <article class="card q-card" aria-labelledby="q4Title">
+          <header class="q-head">
+            <span class="q-num" aria-hidden="true">4</span>
+            <div>
+              <h3 id="q4Title" class="q-title">시작과 끝을 알리는 신호를 순서대로 써 봅시다.</h3>
+              <p class="q-sub">교과서 65쪽 ③번</p>
+            </div>
+          </header>
+
+          <div class="signal-section">
+            <h4 class="signal-heading signal-start">시작 — 집례가 “드오!” 하고 외친 뒤</h4>
+            <div class="signal-grid">
+              <div class="signal-badge bg-teal">시작</div>
+              <div class="signal-cell is-given">
+                <strong>박</strong>
+                <span>한 번</span>
+              </div>
+              <div class="signal-cell">
+                <label for="q4_s1" class="sr-only">시작 두 번째 신호</label>
+                <input type="text" id="q4_s1" name="q4_s1" maxlength="10" placeholder="(     )">
+                <span>한 번</span>
+              </div>
+              <div class="signal-cell">
+                <label for="q4_s2" class="sr-only">시작 세 번째 신호</label>
+                <input type="text" id="q4_s2" name="q4_s2" maxlength="10" placeholder="(     )">
+                <span>두 번</span>
+              </div>
+              <div class="signal-cell">
+                <label for="q4_s3" class="sr-only">시작 네 번째 신호</label>
+                <input type="text" id="q4_s3" name="q4_s3" maxlength="10" placeholder="(     )">
+                <span>한 번</span>
+              </div>
+              <div class="signal-cell">
+                <label for="q4_s4" class="sr-only">시작 다섯 번째 신호</label>
+                <input type="text" id="q4_s4" name="q4_s4" maxlength="10" placeholder="(     )">
+                <span>한 번</span>
+              </div>
+            </div>
+            <p class="helper-note">↑ 가운데 세 칸을 <strong>세 번</strong> 반복한다.</p>
+          </div>
+
+          <div class="signal-section">
+            <h4 class="signal-heading signal-end">끝 — 집례가 “지오!” 하고 외친 뒤</h4>
+            <div class="signal-grid">
+              <div class="signal-badge bg-plum">끝</div>
+              <div class="signal-cell">
+                <label for="q4_e1" class="sr-only">끝 첫 번째 신호</label>
+                <input type="text" id="q4_e1" name="q4_e1" maxlength="10" placeholder="(     )">
+              </div>
+              <div class="signal-cell">
+                <label for="q4_e2" class="sr-only">끝 두 번째 신호</label>
+                <input type="text" id="q4_e2" name="q4_e2" maxlength="10" placeholder="(     )">
+                <span class="sub-small">+ 어 딱 딱</span>
+              </div>
+              <div class="signal-cell">
+                <label for="q4_e3" class="sr-only">끝 세 번째 신호</label>
+                <input type="text" id="q4_e3" name="q4_e3" maxlength="10" placeholder="(     )">
+                <span class="sub-small">+ 어 드르륵</span>
+              </div>
+              <div class="signal-cell is-dots">
+                <span>… 세 번 …</span>
+              </div>
+              <div class="signal-cell is-given">
+                <strong>어</strong>
+                <span class="sub-small">드르륵 (마지막)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout-note group-props">
+            <p class="group-props-title">우리 모둠이 쓸 물건</p>
+            <div class="group-props-grid">
+              <div class="prop-item">
+                <label for="q4_item_bak">박 →</label>
+                <input type="text" id="q4_item_bak" name="q4_item_bak" maxlength="16" placeholder="대신 쓸 물건">
+              </div>
+              <div class="prop-item">
+                <label for="q4_item_chuk">축 →</label>
+                <input type="text" id="q4_item_chuk" name="q4_item_chuk" maxlength="16" placeholder="대신 쓸 물건">
+              </div>
+              <div class="prop-item">
+                <label for="q4_item_jeolgo">절고 →</label>
+                <input type="text" id="q4_item_jeolgo" name="q4_item_jeolgo" maxlength="16" placeholder="대신 쓸 물건">
+              </div>
+              <div class="prop-item">
+                <label for="q4_item_eo">어 →</label>
+                <input type="text" id="q4_item_eo" name="q4_item_eo" maxlength="16" placeholder="대신 쓸 물건">
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="panel-footer-nav">
+          <button type="button" id="toPage2Btn" class="btn btn-navy btn-lg">2면 · 음악 보고서 쓰러 가기 →</button>
+        </div>
+      </section>
+
+      <!-- ══════════════════ 2면 ══════════════════ -->
+      <section id="panelPage2" class="worksheet-panel" aria-labelledby="page2Heading" hidden>
+        <div class="panel-banner">
+          <h2 id="page2Heading" tabindex="-1">2면 · 음악 보고서</h2>
+          <p>교과서 65쪽 ④번 — “종묘제례악”의 의미와 특징, 가치가 드러나게 정리해 봅시다.</p>
+        </div>
+
+        <!-- 보고서 제목 -->
+        <article class="card report-title-card">
+          <div class="report-title-row">
+            <label for="reportTitle" class="report-title-label">보고서 제목</label>
+            <input
+              type="text"
+              id="reportTitle"
+              name="report_title"
+              maxlength="60"
+              placeholder="예) 600년째 멈추지 않은 음악"
+              aria-describedby="reportTitleHelp"
+            >
+          </div>
+          <p id="reportTitleHelp" class="helper-note">나만의 멋진 제목을 붙여 보세요.</p>
+        </article>
+
+        <!-- 보고서 3칸 -->
+        <section class="report-boxes" aria-label="음악 보고서 내용">
+          <article class="report-box box-navy">
+            <header class="rbox-head">
+              <h3>의미</h3>
+              <p>이 음악은 무엇인가 — 누가 · 언제 · 어디서 · 무엇을 위해</p>
+            </header>
+            <p class="rbox-hint" id="hintMeaning">
+              쓸 거리 : 왕과 왕비의 제사 음악 · 세종이 만들고 세조 때부터 · 노래·연주·춤이 함께 · 국가무형유산 1호 · 유네스코 등재
+            </p>
+            <div class="rbox-body">
+              <label for="reportMeaning" class="sr-only">종묘제례악의 의미</label>
+              <textarea id="reportMeaning" name="report_meaning" rows="4" maxlength="500" aria-describedby="hintMeaning" placeholder="종묘제례악이 어떤 음악인지 정리해 보세요."></textarea>
+            </div>
+          </article>
+
+          <article class="report-box box-gold">
+            <header class="rbox-head">
+              <h3>특징</h3>
+              <p>어떻게 들리고 어떻게 하는가 — 내 귀로 들은 것</p>
+            </header>
+            <p class="rbox-hint" id="hintFeature">
+              쓸 거리 : 아주 느리다 · 한 글자를 길게 끈다 · 등가와 헌가가 번갈아 · 축으로 시작 어로 끝 · 64명이 똑같이 춤춘다
+            </p>
+            <div class="rbox-body">
+              <label for="reportFeature" class="sr-only">종묘제례악의 특징</label>
+              <textarea id="reportFeature" name="report_feature" rows="4" maxlength="500" aria-describedby="hintFeature" placeholder="직접 들었을 때 어떤 소리, 빠르기, 구성이 느껴졌는지 적어 보세요."></textarea>
+            </div>
+          </article>
+
+          <article class="report-box box-red">
+            <header class="rbox-head">
+              <h3>가치</h3>
+              <p>왜 소중한가 — <strong>누구에게</strong> · <strong>왜</strong> 를 꼭 넣어 쓸 것</p>
+            </header>
+            <p class="rbox-hint" id="hintValue">
+              “좋았다·신기했다”로 끝내면 감상문이다. 「악보가 남아서 …」 「그래서 우리에게 …이다」처럼 이어 쓸 것
+            </p>
+            <div class="rbox-body">
+              <label for="reportValue" class="sr-only">종묘제례악의 가치</label>
+              <textarea id="reportValue" name="report_value" rows="4" maxlength="500" aria-describedby="hintValue" placeholder="누구에게 왜 소중한지 까닭을 밝혀 적어 보세요."></textarea>
+            </div>
+          </article>
+        </section>
+
+        <!-- 들은 음악 & 우리 반 의식 음악 -->
+        <div class="two-col-grid">
+          <article class="card">
+            <h3 class="sub-card-title navy-text">내가 들어 본 음악에 ✓ 하고, 한마디씩 적기</h3>
+            <div class="listen-list">
+              <div class="listen-row">
+                <label class="listen-check">
+                  <input type="checkbox" name="listen_ck_0">
+                  <span>종묘제례악 <small>(왕실 제사)</small></span>
+                </label>
+                <label for="listenNote0" class="sr-only">종묘제례악 한마디</label>
+                <input type="text" id="listenNote0" name="listen_note_0" maxlength="40" placeholder="한마디">
+              </div>
+              <div class="listen-row">
+                <label class="listen-check">
+                  <input type="checkbox" name="listen_ck_1">
+                  <span>문묘제례악 <small>(공자 제사)</small></span>
+                </label>
+                <label for="listenNote1" class="sr-only">문묘제례악 한마디</label>
+                <input type="text" id="listenNote1" name="listen_note_1" maxlength="40" placeholder="한마디">
+              </div>
+              <div class="listen-row">
+                <label class="listen-check">
+                  <input type="checkbox" name="listen_ck_2">
+                  <span>영산재 / 씻김굿 / 대취타 <small>(택1)</small></span>
+                </label>
+                <label for="listenNote2" class="sr-only">영산재, 씻김굿, 대취타 중 한마디</label>
+                <input type="text" id="listenNote2" name="listen_note_2" maxlength="40" placeholder="한마디">
+              </div>
+              <div class="listen-row">
+                <label class="listen-check">
+                  <input type="checkbox" name="listen_ck_3">
+                  <span>모차르트 「레퀴엠」 <small>(장례 미사)</small></span>
+                </label>
+                <label for="listenNote3" class="sr-only">모차르트 레퀴엠 한마디</label>
+                <input type="text" id="listenNote3" name="listen_note_3" maxlength="40" placeholder="한마디">
+              </div>
+              <div class="listen-row">
+                <label class="listen-check">
+                  <input type="checkbox" name="listen_ck_4">
+                  <span>「Zadok the Priest」 <small>(대관식)</small></span>
+                </label>
+                <label for="listenNote4" class="sr-only">Zadok the Priest 한마디</label>
+                <input type="text" id="listenNote4" name="listen_note_4" maxlength="40" placeholder="한마디">
+              </div>
+              <div class="listen-row">
+                <label class="listen-check">
+                  <input type="checkbox" name="listen_ck_5">
+                  <span>가믈란 <small>(발리 사원 의식)</small></span>
+                </label>
+                <label for="listenNote5" class="sr-only">가믈란 한마디</label>
+                <input type="text" id="listenNote5" name="listen_note_5" maxlength="40" placeholder="한마디">
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3 class="sub-card-title green-text">우리 반이 의식 음악을 만든다면</h3>
+            <div class="class-music-fields">
+              <div class="stacked-field">
+                <label for="classMoment">어떤 순간에?</label>
+                <textarea id="classMoment" name="class_moment" rows="2" maxlength="100" placeholder="예: 아침 독서 시작, 졸업식 등"></textarea>
+              </div>
+              <div class="stacked-field">
+                <label for="classStart">시작 소리는?</label>
+                <textarea id="classStart" name="class_start" rows="2" maxlength="100" placeholder="어떤 악기나 소리로 시작할까요?"></textarea>
+              </div>
+              <div class="stacked-field">
+                <label for="classEnd">끝 소리는?</label>
+                <textarea id="classEnd" name="class_end" rows="2" maxlength="100" placeholder="어떤 소리로 마무리할까요?"></textarea>
+              </div>
+            </div>
+            <p class="callout-note compact-note">
+              <strong>몇 년 뒤 후배들도</strong> 그 소리를 그대로 쓴다면, 그것이 우리 학교의 의식 음악이 된다.
+            </p>
+          </article>
+        </div>
+
+        <!-- 유튜브 다시 듣기 -->
+        <article class="card video-card">
+          <h3 class="sub-card-title navy-text">🔎 집에서 다시 듣고 싶다면 (누르면 유튜브로 이동)</h3>
+          <div class="video-grid">
+            <a class="video-link" href="https://youtu.be/9y6_TwIplmI" target="_blank" rel="noopener noreferrer">
+              <span>유네스코 인류무형문화유산 — 종묘제례 및 종묘제례악</span>
+              <code>9y6_TwIplmI</code>
+            </a>
+            <a class="video-link" href="https://youtu.be/eDjs1r-U-ms" target="_blank" rel="noopener noreferrer">
+              <span>조선왕조 영혼의 음악 「종묘제례악」(국립국악원)</span>
+              <code>eDjs1r-U-ms</code>
+            </a>
+            <a class="video-link" href="https://youtu.be/HoL1psqhIUE" target="_blank" rel="noopener noreferrer">
+              <span>일무 「춤의 기억」 — 보태평지무 중 전폐희문</span>
+              <code>HoL1psqhIUE</code>
+            </a>
+            <a class="video-link" href="https://youtu.be/vWl-0qYOsLA" target="_blank" rel="noopener noreferrer">
+              <span>제례 악기 「축」과 「어」</span>
+              <code>vWl-0qYOsLA</code>
+            </a>
+            <a class="video-link" href="https://youtu.be/LjwBp_QK388" target="_blank" rel="noopener noreferrer">
+              <span>문묘제례악 (국립국악원 토요명품공연)</span>
+              <code>LjwBp_QK388</code>
+            </a>
+            <a class="video-link" href="https://youtu.be/u-_9wSIThd8" target="_blank" rel="noopener noreferrer">
+              <span>한국의 인류유산 — 영산재</span>
+              <code>u-_9wSIThd8</code>
+            </a>
+            <a class="video-link" href="https://youtu.be/UZalR6UcfPk" target="_blank" rel="noopener noreferrer">
+              <span>모차르트 「레퀴엠」 중 라크리모사</span>
+              <code>UZalR6UcfPk</code>
+            </a>
+            <a class="video-link" href="https://youtu.be/Sm_PNbQebdA" target="_blank" rel="noopener noreferrer">
+              <span>헨델 「Zadok the Priest」 (2023 대관식)</span>
+              <code>Sm_PNbQebdA</code>
+            </a>
+          </div>
+        </article>
+
+        <div class="panel-footer-nav">
+          <button type="button" id="toPage1Btn" class="btn btn-outline btn-lg">← 1면 · 듣기 기록장으로</button>
+          <button type="submit" class="btn btn-primary btn-lg">🖼️ 학습지 이미지로 저장하기</button>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <!-- 이미지 저장 미리보기 모달 -->
+  <dialog id="exportDialog" closedby="any" aria-labelledby="exportDialogTitle">
+    <div class="dialog-shell export-shell">
+      <header class="dialog-head">
+        <h1 id="exportDialogTitle">학습지 이미지 저장</h1>
+        <form method="dialog">
+          <button type="submit" class="btn-icon-close" aria-label="닫기" autofocus>✕</button>
+        </form>
+      </header>
+
+      <div class="dialog-body">
+        <div class="preview-tabs" role="tablist" aria-label="미리보기 화면 선택">
+          <button type="button" class="preview-tab is-active" data-preview="combined" aria-selected="true">한 장으로 합치기 (1+2면)</button>
+          <button type="button" class="preview-tab" data-preview="page1" aria-selected="false">1면만 보기</button>
+          <button type="button" class="preview-tab" data-preview="page2" aria-selected="false">2면만 보기</button>
+        </div>
+
+        <div id="exportLoading" class="export-loading">
+          <div class="spinner" aria-hidden="true"></div>
+          <p>선명한 학습지 이미지를 만드는 중이에요…</p>
+        </div>
+
+        <div id="exportError" class="export-error" hidden></div>
+
+        <div id="previewStage" class="preview-stage" hidden>
+          <img id="previewImage" alt="완성된 의식 음악 학습지 이미지 미리보기">
+        </div>
+
+        <p class="ios-tip">
+          📱 아이패드·스마트폰에서는 아래 저장 버튼을 누르거나, 위 이미지를 <strong>길게 눌러</strong> 사진 앱에 저장할 수 있어요.
+        </p>
+      </div>
+
+      <footer class="dialog-foot">
+        <button type="button" id="downloadCombinedBtn" class="btn btn-primary" disabled>한 장으로 저장 (PNG)</button>
+        <button type="button" id="downloadPage1Btn" class="btn btn-navy" disabled>1면 저장</button>
+        <button type="button" id="downloadPage2Btn" class="btn btn-navy" disabled>2면 저장</button>
+        <button type="button" id="shareBtn" class="btn btn-outline" hidden>공유하기</button>
+        <form method="dialog">
+          <button type="submit" class="btn btn-ghost">닫기</button>
+        </form>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- 초기화 확인 모달 -->
+  <dialog id="resetDialog" closedby="any" aria-labelledby="resetDialogTitle">
+    <div class="dialog-shell confirm-shell">
+      <header class="dialog-head">
+        <h1 id="resetDialogTitle">작성한 내용을 모두 지울까요?</h1>
+      </header>
+      <div class="dialog-body">
+        <p class="confirm-text">이름, 빈칸, 줄 잇기, 보고서 내용이 모두 비워집니다. 지운 뒤에는 되돌릴 수 없어요.</p>
+      </div>
+      <footer class="dialog-foot">
+        <form method="dialog" class="confirm-actions">
+          <button type="submit" value="cancel" class="btn btn-ghost" autofocus>취소</button>
+          <button type="submit" value="confirm" class="btn btn-danger">모두 지우기</button>
+        </form>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- PNG 생성용 오프스크린 A4 스테이지 -->
+  <div id="exportStage" aria-hidden="true"></div>
+</body>
+</html>
